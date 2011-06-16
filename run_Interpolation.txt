@@ -1,0 +1,24 @@
+
+addpath('/opt/Matlab/unix/toolbox/eeglab2008October01_beta')
+eeglab
+
+% FILE NAME
+inFileName = 's05_srate300_filt1-120_lab_ICA_Pruned_Renamed.set'; %%%%%%%%%%%
+outFileName = strrep(inFileName, '.set', '');
+
+% PATHS, INPUT
+inDir = '/home/lisandro/CFS/finalSubjects_bsas/s05/'; %%%%%%%%%%%%%%%%
+outDir = '/home/lisandro/CFS/finalSubjects_bsas/s05/'; %%%%%%%%%%%%%%%%%%
+inFilePath = strcat(inDir, inFileName); 
+
+% LOAD RAW DATA
+EEG = pop_loadset( 'filename', inFileName ,'filepath',inDir); 
+fprintf('### Analyzing %s ', inFileName);
+
+% INTERPOLATE
+EEG = my_eeg_interp(EEG, [31 32 57 58 119]); %%%%%%%
+
+% SAVE
+EEG = pop_saveset( EEG,  'filename', [outDir outFileName '_interp']);
+
+exit

@@ -1,0 +1,9 @@
+% addpath('/opt/Matlab/unix/toolbox/eeglab2008October01_beta')
+eeglab
+
+inDir= '/home/lisandro/CFS/Data/finalSubjects_bsas_controls/s07/';
+outDir= '/home/lisandro/CFS/Data/finalSubjects_bsas_controls/s07/';
+inFileName= 's07_aa_CFS_P1.set';
+
+readBdf2ICA_BsAs(inFileName,inDir,outDir);
+exit

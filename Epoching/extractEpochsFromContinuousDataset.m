@@ -1,0 +1,50 @@
+function extractEpochsFromContinuousDataset
+
+inDir= '/home/lisandro/Work/Brian Paper/';
+dir_out= '/home/lisandro/Work/Brian Paper/';
+
+%% Select continuous datasets
+files= dir([inDir '*AvRef.set']);
+%Check that the files are the ones needed
+displayFiles(files)
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; %#ok
+
+for m=1: length(files)    
+    %load dataset
+    EEG = pop_loadset( 'filename',  files(m).name , 'filepath', inDir);
+    [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 ); %#ok
+    EEG = eeg_checkset( EEG );
+    rawName= strrep( files(m).name, '.set', '');
+    %extract epochs    
+    %Mammals
+    EEG = pop_epoch( EEG, {  'S  1'  'S  3'  'S  5'  'S  6'  'S  7'  'S  8'  'S  9'  'S 10'  'S 11'  'S 12'  'S 13'  'S 15'  'S 17'  'S 18'  'S 19'  'S 20'  'S 21'  'S 22'  'S 24'  'S 25'  'S 26'  'S 27'  'S 29'  'S 30'  'S 32'  'S 33'  'S 37'  'S 38'  'S 41'  'S 42'  }, [-1  1], 'newname', 'FedExpAImagesOct08p6x2v2-it-c-1_epochsMammals', 'epochinfo', 'yes');
+    EEG = pop_rmbase( EEG, [-200    0]);
+    EEG = eeg_checkset( EEG );
+    %save with new name    
+    pop_saveset(EEG, 'filename', [rawName '_Mammals.set'],'filepath', dir_out);
+    
+    %Clean the study
+    STUDY = []; CURRENTSTUDY = 0; ALLEEG = []; EEG=[]; CURRENTSET=[]; %#ok
+    
+    %load dataset
+    EEG = pop_loadset( 'filename',  files(m).name , 'filepath', inDir);
+    [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 ); %#ok
+    EEG = eeg_checkset( EEG );
+    %tools
+    EEG = pop_epoch( EEG, {  'S 66'  'S 67'  'S 70'  'S 71'  'S 72'  'S 73'  'S 74'  'S 75'  'S 76'  'S 77'  'S 81'  'S 82'  'S 83'  'S 84'  'S 85'  'S 87'  'S 88'  'S 89'  'S 90'  'S 92'  'S 93'  'S 94'  'S 95'  'S 96'  'S 97'  'S 98'  'S 99'  'S102'  'S104'  'S106'  }, [-1  1], 'newname', 'FedExpAImagesOct08p6x2v2_it_c_1_Tools', 'epochinfo', 'yes');
+    EEG = pop_rmbase( EEG, [-200    0]);
+    EEG = eeg_checkset( EEG );
+     %save with new name    
+    pop_saveset(EEG, 'filename', [rawName '_Tools.set'],'filepath', dir_out);
+    
+    %Clean the study
+    STUDY = []; CURRENTSTUDY = 0; ALLEEG = []; EEG=[]; CURRENTSET=[]; %#ok
+end
+
+
+
+
+
+
+
+

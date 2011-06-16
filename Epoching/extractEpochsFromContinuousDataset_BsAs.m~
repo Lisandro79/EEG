@@ -1,0 +1,100 @@
+function extractEpochsFromContinuousDataset_BsAs(inFileName, dir_in, dir_out)
+
+
+%% Description:
+% Select a continuous dataset (in which artifacts have usually been previouslty cleaned & preprocessed by hand), 
+% extract all the epochs and create and epoched dataset, then run the automatic algorithms for artifact
+% detection, save the cleaned epochs and the urIndexes.
+
+% With the urIndexes extract the final clean epochs from the continuous 
+% dataset and run PyMVPA. 
+% With the urIndexes extract the filan clean epochs from the continuous dataset and run Dalponte's script (use pop_selectevent)
+
+% Extract several datasets from the cleaned epoched dataset returned in the
+% artifact removal corresponding to the different conditions (to run the ERPs)
+% Save them to disk
+
+%% Open EEGLAB
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab; %#ok
+%load dataset
+EEG = pop_loadset( 'filename',  inFileName, 'filepath', dir_in);
+EEG = eeg_checkset( EEG );
+
+% General parameters of the epoched data
+% Define the time limits of the epochs
+timelimit= [-1.5 2]; % Epoch latency limits [start end] IN SECONDS relative to the time-locking event {default: [-1 2]}
+timelimitII= [-1.4 1.9]; % time limit to extract the condition datasets
+% Baseline to remove
+baseline= [-1400 -1000]; % Baseline latency range IN MILLISECONDS.
+% Define rawName
+rawName= strrep(inFileName, '.set', '');
+
+%% Create one epoched dataset with all conditions in order to remove the artifacts
+allEpochNums= {num2cell(1:400)};
+allConditions= 'allConditions';
+% Extract epochs    
+OUTEEG= pop_epoch( EEG, allEpochNums{:}, timelimit, 'newname', allConditions , 'epochinfo', 'yes');
+OUTEEG = pop_rmbase( OUTEEG, baseline);
+OUTEEG = eeg_checkset( OUTEEG );
+% Save the epoched dataset   
+pop_saveset(OUTEEG, 'filename', [rawName '_allEpochs.set'],'filepath', dir_out);    
+%Clean the auxiliary variable to avoid problems
+clear OUTEEG;	
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RUN THE AUTOMATIC ARTIFACT REJECTION AND SAVE THE CLEAN EPOCH DATASET
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[EEG, cleanIndexes, rejIndexes, indexes] =autoArtiDetection([rawName '_allEpochs.set'], dir_in, dir_out);
+
+
+%% SELECT THE EPOCHS AMONG THE DIFFERENT CONDITIONS FROM THE EPOCHED DATA
+% Conditions names
+conditions= {'seenAnimals'  'seenTools' 'seenAnimalsScrambled' 'seenToolsScrambled' 'unseenAnimals' 'unseenTools' 'unseenAnimalsScrambled' 'unseenToolsScrambled' 'seenMeaningful' 'seenMeaningless' 'unseenMeaningful' 'unseenMeaningless' }; 
+% The respective number/trigger for each condition
+epochNums = {num2cell(1:50)  num2cell(51:100) num2cell(101:150) num2cell(151:200) num2cell(201:250) num2cell(251:300) num2cell(301:350) num2cell(351:400) num2cell(1:100) num2cell(101:200) num2cell(201:300) num2cell(301:400)  }; 
+
+for m=1: length(conditions) 
+    % Extract epochs    
+    OUTEEG = pop_epoch( EEG,  epochNums{m}, timelimitII, 'newname', conditions{m}  , 'epochinfo', 'yes');
+%     OUTEEG = pop_rmbase( OUTEEG, baseline);
+    OUTEEG = eeg_checkset( OUTEEG );
+    % Save with new name    
+    pop_saveset(OUTEEG, 'filename', [rawName '_' conditions{m}],'filepath', dir_out);    
+    %Clean the auxiliary variable to avoid problems
+    clear OUTEEG;	
+end
+
+
+
+
+%% SELECT THE EPOCHS AMONG THE DIFFERENT CONDITIONS FROM THE CONTINUOUS DATA
+
+% Load same continuous dataset as prior to the automatic artifact removal
+EEG = pop_loadset( 'filename',  inFileName, 'filepath', dir_in);
+EEG = eeg_checkset( EEG );
+
+% For PyMVPA: take the latencies of the corresponding urevents and save 
+% them as a two column vector, 
+
+save the whole channel EEG.data as a .mat
+
+% loop through EEG.event taking the type and latency of those
+% that match the urevent and create the triggers matrix; save EEG.data
+
+
+% For Dalponte's script: use the same loaded continuous dataset; just
+% 'empty' the rejected events and save dataset with an aggregated name.
+z=1;
+rejIndexes= sort(rejIndexes);
+for m=1:length(EEG.events)
+    if EEG.event(m).urevent == rejIndexes(z)
+        EEG.event(m).type='rej';
+        z= z+1;
+    end
+end
+% Save dataset ready to be run with Dalponte's script
+newName= 'Rej';
+pop_saveset(EEG, 'filename', [rawName '_' newName],'filepath', dir_out);    
+
+

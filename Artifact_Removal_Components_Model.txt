@@ -1,0 +1,63 @@
+
+%===========================================================================================
+
+Eye blinking: check for related components, look at components maps, look at power spectrum of each component.
+
+Eye movements: check for related components, look at components maps, look at power spectrum of each component.
+
+Noisy channels: Individualise channels, Check for periodic noise inside channels, look at components maps -check that
+		the activity comes from a single electrode-, look at power spectrum, try removing the
+		component to see how it looks like.
+
+Muscle artifacts: Check for components
+
+Alpha waves: Check for components, look at components maps, look at power spectrum
+
+Head and shoulder movements: these should be eliminated with the filters, but in any case check for related components, 
+			     look at components maps, look at power spectrum.
+
+
+%=============================================================================================
+
+Steps:
+
+-Subject name: 
+
+- Rename the dataset epochs
+
+- Data sanity check with the spectral plot
+
+* Eye blinking:   
+
+* Eye movements:  
+
+* Noisy channels: interpolate if needed.
+
+* Alpha waves: 
+	
+
+# RUN SCRIPT: batch_analyze_Comp_Interp_AvRef_Notch.M  
+
+		 
+* Components to remove: 
+
+* Remove external channels & Average reference.  (Does the av ref before the hand removing of muscular artifacts help?). 
+
+* Notch Filter at 50Hz.
+
+* Muscle artifacts: they shoulb be taken out in such a way that the remaining epochs do not give boundary problems when epoching
+
+	- data rejected by hand:  
+
+
+# RUN SCRIPT: batch_extractEpochsBash_BsAs.m
+
+- Compare the amount of rejected epochs with Marco's script performance. Threshold of number of epochs for testing the difference?
+
+- Extract Epochs for running ERPs.
+
+- Extracy datasets for MVPA analysis.
+
+
+
+

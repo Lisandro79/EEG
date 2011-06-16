@@ -1,0 +1,43 @@
+function batch_extractEpochsBash_BsAs
+
+
+inFileName = '';
+dir_in = '';
+dir_out = '';
+
+allEpochNums= {num2cell([10 11 20 21 30 31 40 41])};
+allConditions= 'allConditions';
+
+% Conditions names
+conditions= {'noMondrianAnimals'  'noMondrianTools' 'noMondrianAnimalsScrambled' 'noMondrianToolsScrambled' ...
+    'lowMondrianAnimals' 'lowMondrianTools' 'lowMondrianAnimalsScrambled' 'lowMondrianToolsScrambled' ...
+    'noMondrianMeaningful' 'noMondrianMeaningless' 'lowMondrianMeaningful' 'lowMondrianMeaningless' }; 
+
+% The respective number/trigger for each condition
+epochNums = {num2cell(10)  num2cell(20) num2cell(11) num2cell(12) ...
+    num2cell(30) num2cell(40) num2cell(31) num2cell(41) ...
+    num2cell([10 20]) num2cell(101:200) num2cell(201:300) num2cell(301:400)  }; 
+
+% General parameters of the epoched data
+% Define the time limits of the epochs
+timelimit= [-1.5 1]; % Epoch latency limits [start end] IN SECONDS relative to the time-locking event {default: [-1 2]}
+% Baseline to remove
+baseline= [-1500 -1100]; % Baseline latency range IN MILLISECONDS. The first 400ms prior to the fixation cross
+
+extractEpochsBash_BsAs(inFileName, dir_in, dir_out, allEpochNums, allConditions, ...
+   conditions, epochNums, timelimit, baseline)
+
+
+
+%% original conditions for the CFS experiment, 12 subjects
+
+% % Conditions names
+% conditions= {'seenAnimals'  'seenTools' 'seenAnimalsScrambled' 'seenToolsScrambled' ...
+%     'unseenAnimals' 'unseenTools' 'unseenAnimalsScrambled' 'unseenToolsScrambled' ...
+%     'seenMeaningful' 'seenMeaningless' 'unseenMeaningful' 'unseenMeaningless' }; 
+% 
+% % The respective number/trigger for each condition
+% epochNums = {num2cell(1:50)  num2cell(51:100) num2cell(101:150) num2cell(151:200) ...
+%     num2cell(201:250) num2cell(251:300) num2cell(301:350) num2cell(351:400) ...
+%     num2cell(1:100) num2cell(101:200) num2cell(201:300) num2cell(301:400)  }; 
+

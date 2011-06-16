@@ -1,0 +1,7 @@
+dio = digitalio('parallel')
+addline(dio,7,0,'out')   %pin 9
+putvalue(dio,1)          %~700us
+putvalue(dio.Line,1)    %~150us
+uddobj = daqgetfield(dio,'uddobject')
+putvalue(uddobj,1,1); %~20us (undocumented use demo in @dioline\putvalue.m and @digitalio\putvalue.m - args are: uddobj, vals [, lineInds])
+getvalue(uddobj,1);    %~20us (undocumented use demo in @dioline\getvalue.m and @digitalio\getvalue.m - args are: uddobj [, lineInds])
