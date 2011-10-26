@@ -31,6 +31,9 @@ autoArtiDetection.m  % Call the automatic process. Need an epoched dataset to wo
 
 FILES TO PERFORM ERPS:
 
+1- create_ERPs  # Collects data from different subjects and concatenates them into a single 4D matrix. This matrix is saved to disk for later processing
+
+2- plot_ERPs  # Plot ERPs from the different conditions and subjects
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,9 +1,9 @@
 function batch_extractEpochsBash_BsAs
 
 
-inFileName = 's02_pb_CFS_P1_srate300_filt1-120_lab_ICA_Renamed_Pruned_Interp_Av-Ref_Notched.set';
-dir_in = '/home/lisandro/Desktop/EEG_CFS_BsAs/Data/finalSubjects_bsas_controls/s02/';
-dir_out = '/home/lisandro/Desktop/EEG_CFS_BsAs/Data/finalSubjects_bsas_controls/s02/';
+inFileName = 's07_aa_CFS_P1_srate300_filt1-120_lab_ICA_Renamed_Pruned_Interp_Av-Ref_Notched.set';
+dir_in = '/home/lisandro/Desktop/EEG_CFS_BsAs/Data/finalSubjects_bsas_controls/s07/';
+dir_out = '/home/lisandro/Desktop/EEG_CFS_BsAs/Data/finalSubjects_bsas_controls/s07/';
 
 allEpochNums= {num2cell([10 11 20 21 30 31 40 41])};
 allConditions= 'allConditions';
